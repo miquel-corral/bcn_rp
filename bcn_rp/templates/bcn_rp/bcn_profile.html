@@ -1,0 +1,50 @@
+{% extends "bcn_rp/common/menu.html" %}
+{% load admin_static %}
+{% block content %}
+<!-- graphs col -->
+	<div class="col-md-9">
+        <div class="column2">
+		  <div class="CRPP col-md-12">
+		    <div class="test-title">PRELIMINAR PROFILE</div>
+		  </div>
+          <div class="col-md-12">
+            <div id="box">
+                <div class="col-md-12" style="margin-top:20px;">
+                    <div class="col-md-6 col-md-offset-3">
+                        <div id="score" style="height:400px;"></div>
+                    </div>
+                </div>
+                <div class="col-md-12" style="margin-top:20px;">
+                    <div class="col-md-6">
+                        <div id="mov" style="height:300px;"></div>
+                    </div>
+                    <div class="col-md-6">
+                        <div id="completion" style="height:300px;"></div>
+                    </div>
+
+                </div>
+
+                <!--
+                 <div class="Row">
+                    <div id="functional_score" class="Column"></div>
+                    <div id="physical_score" class="Column"></div>
+                 </div>
+                -->
+            </div>
+
+          </div>
+		</div>
+	</div>
+
+   <script type="text/javascript" src="{% static 'bcn_rp/js/score/spiderchart.js' %}"></script>
+    <script type="text/javascript" src="{% static 'bcn_rp/js/score/scoresData.js' %}"></script>
+    <script type="text/javascript" src="{% static 'bcn_rp/js/score/scores.js' %}"></script>
+
+    <script type="text/javascript" src="{% static 'bcn_rp/js/mov/stackedChart.js' %}"></script>
+    <script type="text/javascript" src="{% static 'bcn_rp/js/mov/movData.js' %}"></script>
+    <script type="text/javascript" src="{% static 'bcn_rp/js/mov/mov.js' %}"></script>
+
+    <script type="text/javascript" src="{% static 'bcn_rp/js/mov/pieChart.js' %}"></script>
+    <script type="text/javascript" src="{% static 'bcn_rp/js/mov/completionData.js' %}"></script>
+
+{% endblock%}

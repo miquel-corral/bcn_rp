@@ -1,0 +1,15 @@
+{% extends "bcn_rp/common/menu.html" %}
+{% load admin_static %}
+{% block content %}
+
+<div id="chart" class="col-md-8" style="margin-left:100px;"></div>
+
+
+    <script type="text/javascript" src="{% static 'bcn_rp/js/hazards/d3.v3.min.js' %}"></script>
+
+    <script type="text/javascript" src="{% static 'bcn_rp/js/hazards/d3.dependencyWheel.js' %}"></script>
+    <script type="text/javascript" src="{% static 'bcn_rp/js/hazards/hazardInterdepsData.js' %}"></script>
+    <script type="text/javascript" src="{% static 'bcn_rp/js/hazards/hazardInterdeps.js' %}"></script>
+
+
+{% endblock %}

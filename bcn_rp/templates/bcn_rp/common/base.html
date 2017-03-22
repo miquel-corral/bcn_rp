@@ -1,0 +1,41 @@
+{% load admin_static %}{% load i18n %}
+<html lang="en">
+<head>
+		<meta name="viewport" content="initial-scale=1.0, user-scalable=yes" />
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+		<meta http-equiv="Pragma" content="no-cache"/>
+
+		<title>Barcelona Urban Resilience Indicators March 2017</title>
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+		<script src="http://code.highcharts.com/highcharts.js"></script>
+		<script src="http://code.highcharts.com/highcharts-3d.js"></script>
+        <script src="https://code.highcharts.com/highcharts-more.js"></script>
+        <script src="https://code.highcharts.com/modules/exporting.js"></script>
+        <script src="https://code.highcharts.com/modules/solid-gauge.js"></script>
+        <script src="http://cdnjs.cloudflare.com/ajax/libs/mustache.js/0.7.0/mustache.min.js"></script>
+        <script type="text/javascript" src="{% static 'bcn_rp/js/bootstrap.min.js' %}"></script>
+
+
+        <script src="{% static 'bcn_rp/js/colorbrewer.js' %}"></script>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+		<link rel="stylesheet" href="{% static 'bcn_rp/css/widget_list.css' %}">
+		<link rel="stylesheet" href="{% static 'bcn_rp/css/widget_chart.css' %}">
+
+		<link rel="stylesheet" href="{% static 'bcn_rp/css/light-theme.css' %}">
+        <link rel="stylesheet" href="{% static 'bcn_rp/css/hazards.css' %}">
+
+
+</head>
+<body>
+
+    <div class="row col-md-12">
+        {% block menu %}{% endblock %}
+        {% block content %}{% endblock %}
+    </div>
+
+
+
+
+</body>
+</html>

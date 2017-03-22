@@ -16,6 +16,32 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 
+from bcn_rp import views
+
 urlpatterns = [
+    # django admin application
     url(r'^admin/', admin.site.urls),
+
+    # BCN profile page
+    url(r'^bcn_profile/$', views.bcn_profile, name='bcn_profile'),
+
+    # rest api endpoint for assessment
+    url(r'^assessment/$', views.Assessment.as_view(), name='assessment'),
+
+    # rest api endpoint parent elements list
+    url(r'^parent_elements_list/$', views.ParentElements.as_view(), name='parent_elements_list'),
+
+    # scores urls
+    url(r'^parent_assessmentelement_list/$', views.ParentAssessmentElement.as_view(), name='parent_assessmentelement_list'),
+
+    url(r'^assessmentelement_list/$', views.AssessmentElement.as_view(), name='assessmentelement_list'),
+
+    url(r'^child_assessmentelement_list/$', views.ChildAssessmentElement.as_view(), name='child_assessmentelement_list'),
+
+    # hazards
+    url(r'^hazard_interdependencies/$', views.hazard_interdependencies, name='hazard_interdependencies'),
+
+    url(r'^hazard_dependencies_list/$', views.HazardDependencies.as_view(), name='hazard_dependencies_list'),
+
+
 ]

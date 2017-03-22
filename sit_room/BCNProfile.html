@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="viewport" content="initial-scale=1.0, user-scalable=yes" />
+		<meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+		<meta http-equiv="Pragma" content="no-cache"/>
+
+		<title>Barcelona Urban Resilience Indicators March 2017</title>
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+		<script src="http://code.highcharts.com/highcharts.js"></script>
+		<script src="http://code.highcharts.com/highcharts-3d.js"></script>
+		<script src="http://code.highcharts.com/highcharts-more.js"></script>
+
+		<script src="http://cdnjs.cloudflare.com/ajax/libs/mustache.js/0.7.0/mustache.min.js"></script>
+
+        <script type="text/javascript" src="./js/colorbrewer.js"></script>
+
+        <script type="text/javascript" src="./js/bootstrap.min.js"></script>
+
+		<link rel="stylesheet" href="css/widget_list.css">
+		<!-- <link rel="stylesheet" href="css/widget_chart.css"> -->
+		<link rel="stylesheet" href="css/light-theme.css">
+		<!-- <link rel="stylesheet" href="css/makeitresponsive.css"> -->
+
+        <!-- scoring -->
+		<link rel="stylesheet" href="css/scores.css">
+        <script type="text/javascript" src="./js/score/spiderchart.js">
+        </script>
+        <script type="text/javascript" src="./js/score/scoresData.js">
+        </script>
+        <script type="text/javascript" src="./js/score/scores.js">
+        </script>
+
+
+
+		</head>
+		
+	<body>
+
+	<div class="row col-md-12">
+
+	<!-- menu col -->
+	<div class="col-md-3">
+
+        <div id="column1" class="column1">
+            <div class="T1">
+                <div class="fields">
+                    <div class="field field1 cols1"><span class="textField textField1 T1"> BCN Resilience Profile Mar. 2017</span></div>
+                </div>
+            </div>
+            <div class="CRPP">
+                <div class="fields">
+                    <div class="img"> <img class="estat" src="./img/LogoCRPPUNHabitat.jpg" alt=""> </div>
+                </div>
+            </div>
+            <div class="T2">
+                <div class="fields">
+                    <div class="field field1 cols1"><span class="textField textField1 T2">City Profile</span></div>
+                </div>
+            </div>
+            <div class="PRJ">
+                <div class="fields">
+                    <div class="img"> <img class="estat" src="./img/greenPoint.png" alt=""> </div>
+                    <div class="field field1 cols1"><span class="textField textField1 PRJ">Basic Infrastructure</span></div>
+                </div>
+            </div>
+            <div class="PRJ">
+                <div class="fields">
+                    <div class="img"> <img class="estat" src="./img/greenPoint.png" alt=""> </div>
+                    <div class="field field1 cols1"><span class="textField textField1 PRJ">Built Environment</span></div>
+                </div>
+            </div>
+            <div class="PRJ">
+                <div class="fields">
+                    <div class="img"> <img class="estat" src="./img/greenPoint.png" alt=""> </div>
+                    <div class="field field1 cols1"><span class="textField textField1 PRJ">Economy</span></div>
+                </div>
+            </div>
+            <div class="PRJ">
+                <div class="fields">
+                    <div class="img"> <img class="estat" src="./img/greenPoint.png" alt=""> </div>
+                    <div class="field field1 cols1"><span class="textField textField1 PRJ">Environment</span></div>
+                </div>
+            </div>
+            <div class="PRJ">
+                <div class="fields">
+                    <div class="img"> <img class="estat" src="./img/greenPoint.png" alt=""> </div>
+                    <div class="field field1 cols1"><span class="textField textField1 PRJ">Governance</span></div>
+                </div>
+            </div>
+            <div class="PRJ">
+                <div class="fields">
+                    <div class="img"> <img class="estat" src="./img/greenPoint.png" alt=""> </div>
+                    <div class="field field1 cols1"><span class="textField textField1 PRJ">Public Services</span></div>
+                </div>
+            </div>
+            <div class="PRJ">
+                <div class="fields">
+                    <div class="img"> <img class="estat" src="./img/greenPoint.png" alt=""> </div>
+                    <div class="field field1 cols1"><span class="textField textField1 PRJ">Social</span></div>
+                </div>
+            </div>
+            <div class="PRJ">
+                <div class="fields">
+                    <div class="img"> <img class="estat" src="./img/greenPoint.png" alt=""> </div>
+                    <div class="field field1 cols1"><span class="textField textField1 PRJ">Transport</span></div>
+                </div>
+            </div>
+
+
+        </div>
+
+
+
+	</div>
+
+	<!-- graphs col -->
+	<div class="col-md-9">
+        <div class="column2">
+		  <div class="CRPP col-md-12">
+		    <div class="test-title">PRELIMINAR PROFILE</div>
+		  </div>
+          <div class="col-md-12">
+            <div id="box">
+
+                <div id="leaf" ></div>
+                <div class="Row">
+                    <div id="score" class="Column" ></div>
+                    <div id="organizational_score" class="Column"></div>
+                </div>
+
+                 <div class="Row">
+                    <div id="functional_score" class="Column"></div>
+                    <div id="physical_score" class="Column"></div>
+                 </div>
+
+            </div>
+
+
+          </div>
+          <div class="col-md-6">
+              <script>getData();</script>
+
+          </div>
+          <div class="col-md-6">
+
+          </div>
+		</div>
+	</div>
+
+	</div>
+
+
+
+
+
+
+
+
+	</body>
+</html>

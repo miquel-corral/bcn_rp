@@ -1,0 +1,48 @@
+{% extends "bcn_rp/common/base.html" %}
+{% load admin_static %}
+{% block menu %}
+	<div class="col-md-3">
+
+        <div id="column1" class="column1">
+            <div class="T1">
+                <div class="fields">
+                    <div class="field field1 cols1"><span class="textField textField1 T1"> BCN Resilience Profile Mar. 2017</span></div>
+                </div>
+            </div>
+            <div class="CRPP">
+                <div class="fields">
+                    <div class="img"> <img class="estat" src="{% static 'bcn_rp/img/LogoCRPPUNHabitat.jpg' %}" alt=""> </div>
+                </div>
+            </div>
+            <div class="T2">
+                <div class="fields">
+                    <div class="field field1 cols1"><span class="textField textField1 T2"><a href="/bcn_profile">City Profile</a></span></div>
+                </div>
+            </div>
+            {% for elem in parent_elements %}
+            <div class="PRJ">
+                <div class="fields">
+                    <div class="img"> <img class="estat" src="{% static 'bcn_rp/img/greenPoint.png' %}" alt=""> </div>
+                    <div class="field field1 cols1"><span class="textField textField1 PRJ"><a href="/bcn_profile?id={{elem.id}}">{{ elem.element.name }}</a></span></div>
+                    {% if elem.assessment_element %}
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+            <div class="T2">
+                <div class="fields">
+                    <div class="field field1 cols1"><span class="textField textField1 T2">Hazards</span></div>
+                </div>
+            </div>
+            <div class="PRJ">
+                <div class="fields">
+                    <div class="img"> <img class="estat" src="{% static 'bcn_rp/img/greenPoint.png' %}" alt=""> </div>
+                    <div class="field field1 cols1"><span class="textField textField1 PRJ"><a href="/hazard_interdependencies?id=2">Interdependencies</a></span></div>
+                    {% if elem.assessment_element %}
+                    {% endif %}
+                </div>
+            </div>
+
+        </div>
+    </div>
+{% endblock %}
