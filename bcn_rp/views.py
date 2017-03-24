@@ -2,10 +2,17 @@ from django.template import RequestContext, loader
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render
 
-from rest_framework import generics
+import sys
 
-from bcn_rp.models import AssessmentElement as AssessmentElementModel
+from rest_framework import generics
+from rest_framework.views import APIView
+
+from django.http import JsonResponse
+
+
+from bcn_rp.models import AssessmentElement as AssessmentElementModel, Assessment as AssessmentModel
 from bcn_rp.serializers import *
+from bcn_rp.utils.hazard_utils import get_hazards_selected, get_hazard_groups_selected, get_hazards_with_impacts
 
 ###############################################
 #
@@ -18,8 +25,18 @@ def bcn_profile(request):
     # TODO: filter per assessment
     parent_elements = AssessmentElementModel.objects.filter(element__parent=None)
 
+    assessment = AssessmentModel.objects.all()[0]
+
+    # get hazards selected
+    hs_list = get_hazards_selected(assessment)
+
+    # get hazards impacts
+    hi_list = get_hazards_with_impacts(assessment)
+
     context = RequestContext(request, {
         'parent_elements': parent_elements,
+        'hazard_selected': hs_list,
+        'hi_list': hi_list,
     })
     return HttpResponse(template.render(context))
 
@@ -30,10 +47,78 @@ def hazard_interdependencies(request):
     # TODO: filter per assessment
     parent_elements = AssessmentElementModel.objects.filter(element__parent=None)
 
+    assessment = AssessmentModel.objects.all()[0]
+
+    # get hazards selected
+    hs_list = get_hazards_selected(assessment)
+
+    # get hazards impacts
+    hi_list = get_hazards_with_impacts(assessment)
+
     context = RequestContext(request, {
         'parent_elements': parent_elements,
+        'hazard_selected': hs_list,
+        'hi_list': hi_list,
     })
     return HttpResponse(template.render(context))
+
+
+def hazards_selected(request, assessment_id):
+    """
+    View for hazards selected diagram
+    :param request:
+    :param assessment_id:
+    :return:
+    """
+    assessment = AssessmentModel.objects.get(id=assessment_id)
+
+    # get hazards selected
+    hs_list = get_hazards_selected(assessment)
+
+    hg_list = get_hazard_groups_selected(assessment)
+
+    # parent elements for menu
+    parent_elements = AssessmentElementModel.objects.filter(element__parent=None)
+
+    # get hazards impacts
+    hi_list = get_hazards_with_impacts(assessment)
+
+    # return page
+    template = loader.get_template("bcn_rp/hazards/hazards_selected.html")
+    context = RequestContext(request, {
+        'selected': "HAZARDS_SELECTED",
+        'parent_elements': parent_elements,
+        'hazard_selected': hs_list,
+        'hgs_selected': hg_list,
+        'hi_list': hi_list,
+    })
+    return HttpResponse(template.render(context))
+
+
+def hazard_impacts(request, assessment_id):
+    # get assessment
+    assessment = AssessmentModel.objects.get(id=assessment_id)
+
+    # parent elements for menu
+    parent_elements = AssessmentElementModel.objects.filter(element__parent=None)
+
+
+    # get hazards selected
+    hs_list = get_hazards_selected(assessment)
+
+    # get hazards impacts
+    hi_list = get_hazards_with_impacts(assessment)
+
+    # return page
+    template = loader.get_template("bcn_rp/hazards/hazard_impacts.html")
+    context = RequestContext(request, {
+        'parent_elements': parent_elements,
+        'hazard_selected': hs_list,
+        'hi_list': hi_list,
+    })
+    return HttpResponse(template.render(context))
+
+
 
 
 ###############################################
@@ -102,3 +187,78 @@ class HazardDependencies(generics.ListAPIView):
             queryset = self.model.objects.filter(assessment=id)
             return queryset.order_by('id')
 
+
+class HazardGroupsSelected(generics.ListAPIView):
+    serializer_class = HazardGroupSerializer
+    model = serializer_class.Meta.model
+
+    def get_queryset(self):
+        a_id = self.request.query_params.get('a_id', None)
+
+        if a_id is not None:
+            ah_types = AssessmentHazardType.objects.filter(assessment_id=a_id)
+            hg_ids = []
+            for ah_type in ah_types:
+                try:
+                    if hg_ids.index(ah_type.hazard_type.hazard_group.id) > 0:
+                        pass
+                except:
+                    hg_ids.append(ah_type.hazard_type.hazard_group.id)
+
+            queryset = self.model.objects.filter(id__in=hg_ids)
+            return queryset.order_by('id')
+
+class Impact:
+
+    def __init__(self, source, source_name, target, target_name):
+
+        self.impact_dict = dict()
+
+        self.impact_dict['source'] = source
+        self.impact_dict['source_name'] = source_name
+        self.impact_dict['target'] = target
+        self.impact_dict['target_name'] = target_name
+        self.impact_dict['impact_type'] = 3 # TODO: set from DB. Low by default
+
+        # set some High
+        if source_name == 'Drought' and target_name in ['Electricity Supply', 'Green', 'Health']:
+            self.impact_dict['impact_type'] = 1
+        # set some Mid
+        if source_name == 'Drought' and target_name in ['Air', 'Telecommunications']:
+            self.impact_dict['impact_type'] = 2
+
+
+
+class Impacts(APIView):
+
+    def get(self, request, format=None):
+
+        # TODO: get assessment
+        assessment = AssessmentModel.objects.all()[0]
+
+        # filter param
+        a_h_t_id =  self.request.query_params.get('assessmentElementId', None)
+
+        # Impacts
+        impacts = []
+
+        # Filter hazard impacts if needed
+        a_e_h_i_s = AssessmentElementHazardImpact.objects.filter(assessment=assessment)
+        if a_h_t_id:
+            a_e_h_i_s = a_e_h_i_s.filter(a_h_type__id=a_h_t_id)
+
+        for a_i in a_e_h_i_s:
+            impact = Impact(a_i.a_h_type.id, a_i.a_h_type.hazard_type.name, a_i.a_element.id, a_i.a_element.element.name)
+            impacts.append(impact.impact_dict)
+
+
+        return JsonResponse(impacts, safe=False)
+
+
+class HazardImpactTypes(generics.ListAPIView):
+    serializer_class = HazardImpactTypeSerializer
+    model = serializer_class.Meta.model
+
+    def get_queryset(self):
+        queryset = self.model.objects
+        return queryset.order_by('id')

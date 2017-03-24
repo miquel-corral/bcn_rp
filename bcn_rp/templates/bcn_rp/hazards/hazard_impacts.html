@@ -1,0 +1,137 @@
+{% extends "bcn_rp/common/menu.html" %}
+{% load admin_static %}
+{% block content %}
+
+
+<style>
+
+path.link {
+  fill: none;
+  //stroke: #666;
+  stroke-width: 1.5px;
+}
+
+path.link.opacity {
+  opacity: 0.25;
+  stroke: #ff0;
+}
+
+path.link.dash{
+  //stroke-dasharray  : 3, 3;
+  stroke: #f60;
+  opacity: 0.25;
+}
+
+path.link.blue{
+  //stroke: #00f;
+  stroke: #f00;
+  opacity: 1;
+}
+
+path.link.basic{
+  stroke: #666;
+}
+
+
+
+
+
+rect.link {
+  stroke: #666;
+  stroke-width: 1.5px;
+}
+
+rect.link.opacity {
+  //fill : #666;
+  fill : #ffff66;
+  opacity: 0.25;
+}
+
+rect.link.dash{
+  //fill : none;
+  fill: #ffcc66;
+  stroke-dasharray  : 3, 3
+}
+
+rect.link.blue{
+  //fill : #00f;
+  fill: #ff6666;
+  stroke: #00f;
+}
+
+rect.link.basic{
+    fill : #666;
+    //stroke: #666;
+}
+
+
+circle {
+  fill: #ccc;
+  stroke: #fff;
+  stroke-width: 1.5px;
+}
+
+circle.origin {
+  fill: #f00;
+}
+
+
+text {
+  fill: #000;
+  font: 20px sans-serif;
+  pointer-events: none;
+}
+
+text.legend {
+  fill: #000;
+  font: 10px sans-serif;
+  pointer-events: none;
+}
+
+#depen {
+      background: #fff;
+      border: solid 1px #ddd;
+      box-shadow: 0 0 4px rgba(0,0,0,0);
+      font: 10px sans-serif;
+      height: 800px;
+      position: relative;
+      width: 80%;
+    }
+
+#depen svg {
+      left: 0;
+      position: absolute;
+      top: 0;
+    }
+
+
+
+</style>
+
+
+<script type="text/javascript" src="{% static 'bcn_rp/js/hazards/d3.v3.min.js' %}">
+</script>
+<script type="text/javascript" src="{% static 'bcn_rp/js/hazards/graphLegend.js' %}">
+</script>
+<script type="text/javascript" src="{% static 'bcn_rp/js/hazards/graphTypeCssMapper.js' %}">
+</script>
+<script type="text/javascript" src="{% static 'bcn_rp/js/hazards/graph.js' %}">
+</script>
+<script type="text/javascript" src="{% static 'bcn_rp/js/hazards/dependencies.js' %}">
+</script>
+
+
+<div class="col-md-9">
+  <div class="column2">
+    <div class="CRPP col-md-12">
+      <div class="test-title">PRELIMINAR PROFILE</div>
+    </div>
+    <div class="col-md-12">
+
+    <div id="depen"></div>
+
+
+    </div>
+  </div>
+</div>
+{% endblock %}

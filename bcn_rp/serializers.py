@@ -71,3 +71,9 @@ class AssessmentHazardTypeSerializer(serializers.ModelSerializer):
     class Meta:
         model = AssessmentHazardType
         fields = ('id', 'assessment', 'hazard_type', 'ht_cause', 'ht_consequence')
+
+
+class HazardImpactTypeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AssessmentElementImpactType
+        fields = ('id', 'name')

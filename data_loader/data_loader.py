@@ -341,6 +341,44 @@ def load_hazard_causes_and_consequences():
     print("load_hazard_causes_and_consequences. End.")
 
 
+def load_assessment_hazard_impacts():
+    print("assessment_hazard_impacts. Start.")
+
+    # TODO: get assessment
+    assessment = Assessment.objects.all()[0]
+
+    # process file
+    file_path = settings.BASE_DIR + "/files/" + "Assessment_Hazards.tsv"
+    data_reader = csv.reader(open(file_path), dialect='excel-tab')
+    next(data_reader);
+    # to skip headers row
+    for row in data_reader:
+        try:
+            if row[12] and row[12].strip <> '':
+                a_h_type = AssessmentHazardType.objects.get(assessment=assessment, hazard_type__code=row[2].strip())
+                a_elem_list = [x for x in row[12].strip().split(',') if x and x.strip() <> '']
+                for a_e in a_elem_list:
+                    try:
+                        a_i = AssessmentElementHazardImpact()
+                        a_i.assessment = assessment
+                        a_i.a_h_type = a_h_type
+                        a_i.a_element = AssessmentElement.objects.get(assessment=assessment, element__code=a_e.strip())
+                        a_i.impact_type = AssessmentElementImpactType.objects.get(name='Mid')
+                        a_i.save()
+                    except:
+                        print("Error creating hazard impact on element: " + str(a_e))
+                        print(sys.exc_info())
+        except:
+            print("Error processing row: " + str(row))
+            print(sys.exc_info())
+
+    print("assessment_hazard_impacts. End.")
+
+
+
+
+
+
 def create_aht_causes(assessment, aht_code, aht_causes):
     # list of causes
     aht_list = [x for x in aht_causes.split(',') if x and x.strip() <> '']
@@ -605,10 +643,18 @@ if __name__ == "__main__":
 
     # load assessment hazards
     load_assessment_hazards()
-    """
 
     # create hazard causes and consequences
     load_hazard_causes_and_consequences()
+
+    # create type of impacts
+    create_type_HML(AssessmentElementImpactType)
+    """
+
+    #  assessment hazard impact
+    load_assessment_hazard_impacts()
+
+
 
 
 

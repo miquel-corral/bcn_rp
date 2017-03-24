@@ -1,0 +1,114 @@
+{% extends "bcn_rp/common/menu.html" %}
+{% load admin_static %}
+{% load get %}
+{% block content %}
+<div class="col-md-9">
+  <div class="column2">
+    <div class="CRPP col-md-12">
+      <div class="test-title">PRELIMINAR PROFILE</div>
+    </div>
+    <div class="col-md-12">
+
+    <div id="hazards_selected" class="col-md-9 col-md-offset-1" style="width: 1000px; height: 800px;"></div>
+
+
+    <!-- script for hazards selected -->
+    <script>
+        $(function () {
+
+            var colors = Highcharts.getOptions().colors,
+                categories = [{% for key, value in hazard_selected.items %}'{{key}}'{% if not forloop.last %},{% endif %}{% endfor %}],
+                data = [{% for key, value in hazard_selected.items %}{
+                        y:{% with key as hg_name %} {{ hgs_selected|get:hg_name }} {% endwith %},
+                        color: colors[{{forloop.counter|add:'1'}}],
+                        drilldown: {
+                            name: '{{key}}',
+                            categories: [{% for k, v in value.items %}'{{k}}'{% if not forloop.last %},{% endif %}{% endfor %}],
+                            data:[{% for k, v in value.items %}{{v}}{% if not forloop.last %},{% endif %}{% endfor %}],
+                            color: colors[{{forloop.counter|add:'1'}}]
+                        }}{% if not forloop.last %},{% endif %}{% endfor %}],
+                browserData = [],
+                versionsData = [],
+                i,
+                j,
+                dataLen = data.length,
+                drillDataLen,
+                brightness;
+
+
+            // Build the data arrays
+            for (i = 0; i < dataLen; i += 1) {
+
+                // add browser data
+                browserData.push({
+                    name: categories[i],
+                    y: data[i].y,
+                    color: data[i].color
+                });
+
+                // add version data
+                drillDataLen = data[i].drilldown.data.length;
+                for (j = 0; j < drillDataLen; j += 1) {
+                    brightness = 0.2 - (j / drillDataLen) / 5;
+                    versionsData.push({
+                        name: data[i].drilldown.categories[j],
+                        y: data[i].drilldown.data[j],
+                        color: Highcharts.Color(data[i].color).brighten(brightness).get()
+                    });
+                }
+            }
+
+            // Create the chart
+            $('#hazards_selected').highcharts({
+                chart: {
+                    type: 'pie'
+                },
+                title: {
+                    text: ''
+                },
+                credits: {
+                    enabled: false
+                },
+                exporting: {
+                    enabled: false
+                },
+                plotOptions: {
+                    pie: {
+                        shadow: false,
+                        center: ['50%', '50%']
+                    }
+                },
+                tooltip: {
+                    valueSuffix: '%'
+                },
+                series: [{
+                    name: 'Hazard Groups',
+                    data: browserData,
+                    size: '60%',
+                    dataLabels: {
+                        formatter: function () {
+                            return this.y > 5 ? this.point.name : null;
+                        },
+                        color: '#ffffff',
+                        distance: -30
+                    }
+                }, {
+                    name: 'Hazard Types',
+                    data: versionsData,
+                    size: '80%',
+                    innerSize: '60%',
+                    dataLabels: {
+                        formatter: function () {
+                            // display only if larger than 1
+                            return this.y > 1 ? '<b>' + this.point.name + '</b> ' : null;
+                        }
+                    }
+                }]
+            });
+        });
+    </script>
+  </div>
+  </div>
+</div>
+
+{% endblock %}

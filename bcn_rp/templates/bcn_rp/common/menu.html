@@ -31,17 +31,24 @@
             {% endfor %}
             <div class="T2">
                 <div class="fields">
-                    <div class="field field1 cols1"><span class="textField textField1 T2">Hazards</span></div>
+                    <div class="field field1 cols1"><span class="textField textField1 T2"><a href="/hazards_selected/1">Hazards</a></span></div>
                 </div>
             </div>
             <div class="PRJ">
                 <div class="fields">
                     <div class="img"> <img class="estat" src="{% static 'bcn_rp/img/greenPoint.png' %}" alt=""> </div>
-                    <div class="field field1 cols1"><span class="textField textField1 PRJ"><a href="/hazard_interdependencies?id=2">Interdependencies</a></span></div>
-                    {% if elem.assessment_element %}
-                    {% endif %}
+                    <div class="field field1 cols1"><span class="textField textField1 PRJ"><a href="/hazard_interdependencies?id=1">Interdependencies</a></span></div>
                 </div>
             </div>
+            <div class="PRJ">
+                <div class="fields">
+                    <div class="img"> <img class="estat" src="{% static 'bcn_rp/img/greenPoint.png' %}" alt=""> </div>
+                    <div class="field field1 cols1"><span class="textField textField1 PRJ"><a href="/hazard_impacts/1">Impacts</a></span></div>
+                </div>
+            </div>
+            {% for a_h_t in hi_list %}
+                    <div class="field field1 cols1" style="margin-left:40px;"><span class="textField textField PRJ"><a href="/hazard_impacts/1?assessmentElementId={{a_h_t.id}}">{{a_h_t.hazard_type.name|truncatechars:15}}</a></span></div>
+            {% endfor %}
 
         </div>
     </div>

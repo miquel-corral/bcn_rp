@@ -43,5 +43,15 @@ urlpatterns = [
 
     url(r'^hazard_dependencies_list/$', views.HazardDependencies.as_view(), name='hazard_dependencies_list'),
 
+    url(r'^hazard_groups_selected/$', views.HazardGroupsSelected.as_view(), name='hazard_groups_selected'),
+
+    url(r'^hazards_selected/(?P<assessment_id>\d+)/$', views.hazards_selected, name='hazards_selected'),
+
+    url(r'^hazard_impacts_list/$', views.Impacts.as_view(), name='hazard_impacts_list'),
+
+    url(r'^hazard_impact_type_list/$', views.HazardImpactTypes.as_view(), name='hazard_impact_type_list'),
+
+    url(r'^hazard_impacts/(?P<assessment_id>\d+)/$$', views.hazard_impacts, name='hazard_impacts'),
+
 
 ]
