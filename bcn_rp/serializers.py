@@ -12,7 +12,7 @@ class AssessmentSerializer(serializers.ModelSerializer):
 class ElementSerializer(serializers.ModelSerializer):
     class Meta:
         model = Element
-        fields = ('code', 'name', "address", "note")
+        fields = ('id', 'code', 'name', "address", "note")
 
 
 class HazardGroupSerializer(serializers.ModelSerializer):
@@ -21,12 +21,19 @@ class HazardGroupSerializer(serializers.ModelSerializer):
         fields = ('code', 'name', "address", "note")
 
 
+class AssessmentStakeholderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = AssessmentStakeholder
+        fields = ('id', 'name', 'element_id')
+
+
 class AssessmentElementSerializer(serializers.ModelSerializer):
     element = ElementSerializer(read_only=True)
+    stakeholders = AssessmentStakeholderSerializer(many=True, read_only=True)
 
     class Meta:
         model = AssessmentElement
-        fields = ('id', 'enabled', 'element', 'score')
+        fields = ('id', 'enabled', 'element', 'score', 'stakeholders')
 
 
 class AEDependenciesSerializer(serializers.ModelSerializer):

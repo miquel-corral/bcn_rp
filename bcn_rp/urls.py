@@ -48,10 +48,21 @@ urlpatterns = [
     url(r'^hazards_selected/(?P<assessment_id>\d+)/$', views.hazards_selected, name='hazards_selected'),
 
     url(r'^hazard_impacts_list/$', views.Impacts.as_view(), name='hazard_impacts_list'),
+    #url(r'^hazard_impacts_list/(?P<assessment_id>\d+)/$', views.Impacts.as_view(), name='hazard_impacts_list'),
 
     url(r'^hazard_impact_type_list/$', views.HazardImpactTypes.as_view(), name='hazard_impact_type_list'),
 
-    url(r'^hazard_impacts/(?P<assessment_id>\d+)/$$', views.hazard_impacts, name='hazard_impacts'),
+    url(r'^hazard_impacts/$', views.hazard_impacts, name='hazard_impacts'),
+    url(r'^hazard_impacts/(?P<assessment_id>\d+)/$', views.hazard_impacts, name='hazard_impacts'),
+
+    # stakeholders
+    url(r'^stakeholders/(?P<assessment_id>\d+)/$', views.stakeholders, name='stakeholders'),
+
+    url(r'^dependencies_list/$', views.Dependencies.as_view(), name='dependencies_list'),
+
+    url(r'^dependency_type_list/$', views.DependencyTypes.as_view(), name='dependency_type_list'),
+
+    url(r'^assessmentstakeholder_list/$', views.AssessmentStakeholder.as_view(), name='assessmentstakeholder_list'),
 
 
 ]

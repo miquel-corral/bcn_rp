@@ -46,9 +46,18 @@
                     <div class="field field1 cols1"><span class="textField textField1 PRJ"><a href="/hazard_impacts/1">Impacts</a></span></div>
                 </div>
             </div>
+            <div class="PRJ">
+                <div class="fields">
             {% for a_h_t in hi_list %}
                     <div class="field field1 cols1" style="margin-left:40px;"><span class="textField textField PRJ"><a href="/hazard_impacts/1?assessmentElementId={{a_h_t.id}}">{{a_h_t.hazard_type.name|truncatechars:15}}</a></span></div>
             {% endfor %}
+                </div>
+            </div>
+            <div class="T2">
+                <div class="fields">
+                    <div class="field field1 cols1"><span class="textField textField1 T1"><a href="/stakeholders/1">Stakeholders</a></span></div>
+                </div>
+            </div>
 
         </div>
     </div>

@@ -37,7 +37,14 @@ function getURLParameter(sParam){
 }
 
 function getGraphData(id){
-    d3.json("/hazard_impacts_list?assessmentElementId=" + id + "&level=1", function(error, graphData) {
+
+    if(typeof(id)==='undefined'){
+        url="/hazard_impacts_list/";
+    }else{
+        url="/hazard_impacts_list?assessmentElementId=" + id + "&level=1";
+    }
+
+    d3.json(url, function(error, graphData) {
         if (error) return console.error('Error loading graph data', error)
         // Build graph
         graph = new Graph(graphData, id, typeCssMapper, "small", getHeight(), getWidth());
@@ -47,6 +54,14 @@ function getGraphData(id){
  }
 
  function getTypeData(){
+
+     if(typeof(id)==='undefined'){
+        url="/hazard_impact_type_list/1?level=1";
+    }else{
+        url="/hazard_impact_type_list/1?assessmentElementId=" + id + "&level=1";
+    }
+
+
     d3.json("/hazard_impact_type_list", function(error, dataTypes) {
         if (error) return console.error('Error loading type data', error)
          // Build legend

@@ -119,6 +119,30 @@ def hazard_impacts(request, assessment_id):
     return HttpResponse(template.render(context))
 
 
+def stakeholders(request, assessment_id):
+    # get assessment
+    assessment = AssessmentModel.objects.get(id=assessment_id)
+
+    # parent elements for menu
+    parent_elements = AssessmentElementModel.objects.filter(element__parent=None)
+
+
+    # get hazards selected
+    hs_list = get_hazards_selected(assessment)
+
+    # get hazards impacts
+    hi_list = get_hazards_with_impacts(assessment)
+
+    # return page
+    template = loader.get_template("bcn_rp/stakeholders.html")
+    context = RequestContext(request, {
+        'parent_elements': parent_elements,
+        'hazard_selected': hs_list,
+        'hi_list': hi_list,
+    })
+    return HttpResponse(template.render(context))
+
+
 
 
 ###############################################
@@ -262,3 +286,61 @@ class HazardImpactTypes(generics.ListAPIView):
     def get_queryset(self):
         queryset = self.model.objects
         return queryset.order_by('id')
+
+
+class Dependencies(generics.ListAPIView):
+    serializer_class = AEDependenciesSerializer
+    model = serializer_class.Meta.model
+
+    def get_queryset(self):
+
+        assesstment_element_id = self.request.query_params.get('assesstmentElementId', None)
+
+        levelparam = self.request.query_params.get('level', 2)
+
+        if assesstment_element_id is not None:
+            return self.get_all_children(assesstment_element_id, int(levelparam))
+        else:
+            return self.model.objects
+
+    def get_all_children(self, ae_id, max_level):
+        r = []
+        if max_level == 0:
+            return r
+
+        dep = self.model.objects.filter(ae_origin_id=ae_id)
+
+        r.extend(dep)
+
+        for c in dep:
+            _r = self.get_all_children(c.ae_dependent_id, max_level - 1)
+            if 0 < len(_r):
+                r.extend(_r)
+        return r
+
+
+class DependencyTypes(generics.ListAPIView):
+    serializer_class = DependencyTypeSerializer
+    model = serializer_class.Meta.model
+
+    def get_queryset(self):
+        queryset = self.model.objects
+        return queryset.order_by('id')
+
+
+class AssessmentStakeholder(generics.ListAPIView):
+
+    serializer_class = AssessmentStakeholderSerializer
+    model = serializer_class.Meta.model
+
+
+
+    def get_queryset(self):
+
+        ae_stakeholder_id = self.request.query_params.get('ae_stakeholder_id', None)
+
+        if ae_stakeholder_id is not None:
+            queryset = self.model.objects
+        else:
+            return  self.model.objects
+

@@ -217,6 +217,32 @@ def create_ae_dependencies():
             create_ae_dependency(ae, "Low")
 
 
+def create_ae_dependency(ae_origin, ae_dependent, dep_type):
+    aed = AEDependencies()
+    aed.ae_origin = ae_origin
+    aed.ae_dependent = ae_dependent
+    aed.dependency_type = DependencyType.objects.get(name=dep_type)
+    aed.save()
+
+
+def create_ae_dependencies_not_random():
+    # electricity supply
+    ae_origin = AssessmentElement.objects.get(element__code='1.1')
+
+    # rest of basic services high dependency
+    for ae in AssessmentElement.objects.filter(element__code__in=['1.2','1.3','1.4','1.5','1.6','1.7','6.2']):
+       create_ae_dependency(ae_origin, ae, "High")
+
+    # public services mid dependency
+    for ae in AssessmentElement.objects.filter(element__code__in=['6.1','6.4','6.5','6.6']):
+       create_ae_dependency(ae_origin, ae, "Mid")
+
+    # Other low dependency
+    for ae in AssessmentElement.objects.filter(element__code__in=['8.2.1','8.2.2','8.3.2','8.5.1']):
+       create_ae_dependency(ae_origin, ae, "Low")
+
+
+
 def load_hazards():
     """
     Load hazards file
@@ -546,7 +572,8 @@ def load_stakeholder_types():
 
 
 def create_stakeholder_relationship_with_lg():
-    types = ["Cooperates", "Informs", "Ignores"]
+    #types = ["Cooperates", "Informs", "Ignores"]
+    types = ["No data available or does not inform", "Informs", "Consults", "Partners up"]
     for type in types:
         rlg = StakeholderLGRelationshipType()
         rlg.name = type
@@ -560,6 +587,61 @@ def create_stakeholder_relationship_with_element():
         sre.name = type
         sre.save()
 
+
+def load_assessment_stakeholders():
+    print("load_assessment_stakeholders. Start.")
+
+    # TODO: get assessment
+    assessment = Assessment.objects.all()[0]
+
+    file_path = settings.BASE_DIR + "/files/" + "Assessment_Stakeholders.tsv"
+    data_reader = csv.reader(open(file_path), dialect='excel-tab')
+    next(data_reader)
+    next(data_reader)
+    # to skip headers row (2 rows)
+
+    for row in data_reader:
+        # there are rows without code type
+        if row[3] and row[3].strip() <> '':
+            try:
+                a_s = AssessmentStakeholder()
+                a_s.assessment = assessment
+                a_s.name = row[4].strip()
+
+                try:
+                    a_s.stakeholder_type = StakeholderType.objects.get(code=row[3].strip())
+                except:
+                    raise Exception("Error looking for stakeholder type: " + row[3].strip())
+
+                if row[8] and row[8].strip() <> '':
+                    try:
+                        a_s.element = AssessmentElement.objects.get(element__code=row[7].strip())
+                    except:
+                        raise Exception("Error looking for element: " + row[7].strip())
+                if row[9] and row[9].strip() <> '':
+                    try:
+                        a_s.element_rel_type = StakeholderElementRelationshipType.objects.get(name=row[9].strip())
+                    except:
+                        raise Exception("Error looking for StakeholderElementRelationshipType: " + row[9].strip())
+                if row[10] and row[10].strip() <> '':
+                    try:
+                        a_s.from_lg_rel_type = StakeholderLGRelationshipType.objects.get(name=row[10].strip())
+                    except:
+                        raise Exception("Error looking for StakeholderLGRelationshipType: " + row[10].strip())
+                if row[11] and row[11].strip() <> '':
+                    try:
+                        a_s.to_lg_rel_type = StakeholderLGRelationshipType.objects.get(name=row[11].strip())
+                    except:
+                        raise Exception("Error looking for StakeholderLGRelationshipType: " + row[11].strip())
+                a_s.save()
+
+
+            except:
+                print("Error processing row: " + str(row))
+                print(sys.exc_info())
+                print(sys.stdout.flush())
+
+    print("load_assessment_stakeholders. End.")
 
 def create_assessment_stakeholder(ae,element_rel_type, to_lg_rel_type, from_lg_rel_type):
     try:
@@ -649,14 +731,31 @@ if __name__ == "__main__":
 
     # create type of impacts
     create_type_HML(AssessmentElementImpactType)
-    """
 
     #  assessment hazard impact
     load_assessment_hazard_impacts()
 
+    # create stakeholder relationship type with LG
+    create_stakeholder_relationship_with_lg()
+
+    # create stakeholder relationship type with element
+    create_stakeholder_relationship_with_element()
+
+    # load Stakeholders groups and type
+    load_stakeholder_groups()
+    load_stakeholder_types()
+
+    # load assessment stakeholders
+    load_assessment_stakeholders()
+
+    # create dependencies types
+    create_type_HML(DependencyType)
+    """
 
 
 
+    # create assessment element dependencies
+    create_ae_dependencies_not_random()
 
     """
     # create dependencies types

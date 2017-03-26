@@ -1,0 +1,35 @@
+{% extends "bcn_rp/common/menu.html" %}
+{% load admin_static %}
+{% block content %}
+
+
+
+<div class="col-md-9">
+  <div class="column2">
+    <div class="CRPP col-md-12">
+      <div class="test-title">PRELIMINAR PROFILE</div>
+    </div>
+    <div class="col-md-12">
+
+        <div id="chart" style="height:1000px;"></div>
+
+
+    </div>
+  </div>
+</div>
+
+
+<link rel="stylesheet" href="{% static 'bcn_rp/css/stakeholders.css' %}">
+
+<script type="text/javascript" src="{% static 'bcn_rp/js/stakeholders/d3.v3.min.js' %}">
+</script>
+<script type="text/javascript" src="{% static 'bcn_rp/js/stakeholders/bihisankey.js' %}">
+</script>
+<script type="text/javascript" src="{% static 'bcn_rp/js/stakeholders/stakeholdersData.js' %}">
+</script>
+<script type="text/javascript" src="{% static 'bcn_rp/js/stakeholders/stakeholders.js' %}">
+</script>
+
+
+
+{% endblock %}

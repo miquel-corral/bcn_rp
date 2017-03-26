@@ -329,16 +329,17 @@ class StakeholderLGRelationshipType(BasicName):
     Represents the type of relation of a Stakeholder with the Local Government
     """
 
-class AssessmentStakeholder(BasicName):
+class AssessmentStakeholder(Common):
     """
     Represents Stakeholders in the Assessment
     """
+    name = CharField(max_length=250, null=False, blank=False, unique=False)
     assessment = ForeignKey(Assessment)
     stakeholder_type = ForeignKey(StakeholderType)
-    element = ForeignKey(AssessmentElement)
-    element_rel_type = ForeignKey(StakeholderElementRelationshipType)
-    to_lg_rel_type = ForeignKey(StakeholderLGRelationshipType, related_name="to_lg_rel_type")
-    from_lg_rel_type = ForeignKey(StakeholderLGRelationshipType, related_name="from_lg_rel_type")
+    element = ForeignKey(AssessmentElement, null=True, blank=True, related_name='stakeholders')
+    element_rel_type = ForeignKey(StakeholderElementRelationshipType, null=True, blank=True)
+    to_lg_rel_type = ForeignKey(StakeholderLGRelationshipType, related_name="to_lg_rel_type", null=True, blank=True)
+    from_lg_rel_type = ForeignKey(StakeholderLGRelationshipType, related_name="from_lg_rel_type", null=True, blank=True)
 
 
 
